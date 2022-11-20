@@ -1,0 +1,351 @@
+MainWidget:
+
+
+<MainWidget>:
+    # anchor_x: "center"
+    # anchor_y: "top"
+    size_hint: 1, 1
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<MainGuiFrame>:
+    size_hint: 1, 1
+    padding: [5, 5, 5, 5]
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: "images/bg_cityscape_v2.jpg"
+
+<OverlayFrame>:
+    size_hint: 1, 1
+    # anchor_x: "center"
+    # anchor_y: "center"
+
+<MainConsole>:
+    size_hint: 0.8, None
+    height: "40dp"
+    pos_hint: {"center_x": 0.5}
+    canvas.before:
+        Color:
+            rgba: app.CUSTOM_RED
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Button:
+        id: start_game_button
+        text: "Start Game"
+        on_press: app.gui.primary_game_button()
+    Button:
+        id: tab_charsheet
+        text: "Character"
+        on_press: app.gui.sm.change_screen("tab_charsheet")
+    Button:
+        id: tab_haven
+        text: "Haven & Powers"
+        on_press: app.gui.sm.change_screen("tab_haven")
+    Button:
+        id: tab_domain
+        text: "Domain"
+        on_press: app.gui.sm.change_screen("tab_domain")
+    Button:
+        id: tab_credits
+        text: "Credits"
+        on_press: app.gui.sm.change_screen("tab_credits")
+    Button:
+        id: tab_settings
+        text: "Settings"
+        on_press: app.gui.sm.change_screen("tab_settings")
+    Button:
+        id: quit_button
+        text: "Exit"
+        on_press: app.gui.on_press_quit()
+
+<DevConsole>:
+    size_hint: 0.5, None
+    height: "70dp"
+    pos_hint: {"center_x": 0.5, "top": 1}
+    canvas.before:
+        Color:
+            rgba: 0.4, 0.1, 0.4, 0.6
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        id: dev_console_buttons:
+        size_hint: 1, None
+        height: "40dp"
+        FitButton:
+            id: print_widget_tree
+            text: "Print Widget Tree"
+            on_press: app.gui.print_widget_tree()
+        FitButton:
+            id: game_log_print
+            text: "Print Game Log"
+            on_press: app.game.print_log()
+        Label:
+            text: "Hunger"
+            size_hint: None, 1
+            width: "70dp"
+        PlusMinusButton:
+            id: raise_hunger
+            on_press: app.game.set_hunger("+=1")
+        PlusMinusButton:
+            id: lower_hunger
+            text: "-"
+            on_press: app.game.set_hunger("-=1")
+        FitButton:
+            id: zero_hunger
+            text: "Fully Sate"
+            # text_size: self.size
+            on_press: app.game.set_hunger(0, True, True)
+        Label:
+            text: "Humanity"
+            size_hint: None, 1
+            width: "80dp"
+        PlusMinusButton:
+            id: raise_humanity
+            on_press: app.game.set_humanity("+=1")
+        PlusMinusButton:
+            id: lower_humanity
+            text: "-"
+            on_press: app.game.set_humanity("-=1")
+        FitButton:
+            id: load_test_bg
+            text: "Load Test Char"
+            on_press: app.game.load_test_char_1()
+    Label:
+        id: dev_readout
+        text: ""
+
+<MainTextFeed>:
+    size_hint: 0.8, None
+    height: "250dp"
+    pos_hint: {"center_x": 0.5, "y": 0.07}
+    FloatLayout:
+        id: text_feed_container
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        padding: [5, 5, 5, 5]
+        BoxLayout:
+            id: readout_container
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            padding: [15, 5]
+            canvas.before:
+                Color:
+                    rgba: 0.1, 0.1, 0.1, 0.8
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: root.CUSTOM_RED
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+            Label:
+                id: readout
+                size_hint: 1, 1
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                font_size: "20sp"
+                text_size: self.size
+                halign: "center"
+                valign: "middle"
+        BoxLayout:
+            id: choices_container
+            orientation: "vertical"
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}
+            padding: [15, 5]
+            Label:
+                id: choice_prompt
+                font_size: "20sp"
+                # text_size: self.size
+                size_hint: 1, 0.25
+            BoxLayout:
+                id: choice_list_container
+                orientation: "vertical"
+
+    ToggleButton:
+        id: display_switch
+        pos_hint: {"right": 1, "y": 0}
+        text: "Hide Text"
+        size_hint: None, None
+        size: "80dp", "40dp"
+        state: "down"
+        on_state: root.on_toggle_display(self)
+    FitButton:
+        id: next_text_button
+        pos_hint: {"right": 0, "y": 0}
+        text: "Next"
+        on_press: root.on_click_next()
+        custom_height: 50
+
+<ScreenJuggler>:
+    size_hint: 1, 1
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+<EventScreen>:
+    canvas.before:
+        Rectangle:
+            size: self.size
+            source: "images/bg_cityscape_v2.jpg"
+    BoxLayout:
+        id: dice_roll_container
+        orientation: "vertical"
+        pos_hint: {"center_x": 0.5, "top": 0.9}
+        size_hint: 0.7, 0.5
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 0.3
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        Label:
+            id: dice_pool_readout
+            size_hint: 1, None
+            height: "40dp"
+            font_size: "20sp"
+            text: ""
+        Label:
+            id: full_dice_result
+            size_hint: 1, None
+            height: "40dp"
+            font_size: "20sp"
+            text: ""
+        Label:
+            id: roll_readout
+            size_hint: 1, None
+            height: "40dp"
+            font_size: "20sp"
+            text: ""
+        Label:
+            id: roll_record
+            size_hint: 1, 0.7
+            font_size: "16sp"
+            # text_size: self.width, None
+            # minheight: self.texture_size[1]
+            text: ""
+        BoxLayout:
+            id: dice_roll_console
+            orientation: "horizontal"
+            size_hint: 1, None
+            height: "60dp"
+            FitButton:
+                id: reroll_for_better
+                text: "Re-roll (+)"
+                disabled: True
+                on_press: app.gui.reroll_from_main()
+            FitButton:
+                id: reroll_for_safety
+                text: "Re-roll (Avoid messy crit)"
+                disabled: True
+                on_press: app.gui.reroll_from_main(True)
+            FitButton:
+                id: continue
+                text: "Continue"
+                on_press: root.on_click_continue()
+
+
+<CharacterScreen>:
+    canvas.before:
+        Rectangle:
+            size: self.size
+            source: "images/bg_charsheet2.jpg"
+    CSDossier:
+        id: cs_dossier
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 0.3
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    CSAttributePanel:
+        id: cs_attributes
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 0.3
+            Rectangle:
+                pos: self.pos
+                size: self.size
+    CSSkillPanel:
+        id: cs_skills
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 0.3
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+<HavenScreen>:
+    canvas.before:
+        Rectangle:
+            size: self.size
+            source: "images/bg_haven.jpg"
+
+<DomainScreen>:
+    canvas.before:
+        Rectangle:
+            size: self.size
+            source: "images/bg_domain.jpg"
+
+<CreditsScreen>:
+    canvas.before:
+        Rectangle:
+            size: self.size
+            source: "images/bg_credits.jpg"
+    BoxLayout:
+        id: credits_container
+        size_hint: 0.8, 0.85
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        padding: [10, 10, 10, 10]
+        canvas.before:
+            Color:
+                rgba: 0.2, 0.2, 0.2, 0.4
+            Rectangle:
+                pos: self.pos
+                size: self.size
+            Color:
+                rgba: app.CUSTOM_RED
+            Line:
+                rectangle: self.x, self.y, self.width, self.height
+
+<SettingsScreen>:
+    canvas.before:
+        Rectangle:
+            size: self.size
+            source: "images/bg_settings1.jpg"
+    StackLayout:
+        size_hint: 0.8, 0.85
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        padding: 10
+        spacing: 10
+        BoxLayout:
+            id: audio_settings
+            orientation: "vertical"
+            size_hint: 0.4, None
+            height: "150dp"
+            padding: 5
+            canvas.before:
+                Color:
+                    rgba: root.CUSTOM_RED
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+
+<DarkPackDisclaimer>:
+    size_hint: 1, None
+    pos_hint: {"x": 0, "top": 1}
+    height: "100dp"
+    anchor_x: "center"
+    anchor_y: "top"
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: 100, 100
+            source: "images/logo_darkpack2.png"
+    Label:
+        size_hint: 1, None
+        height: "40dp"
+        text: app.gui.dpd_string

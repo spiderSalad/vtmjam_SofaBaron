@@ -1,0 +1,68 @@
+>|event_start
+
+>|statechange="start_at_hunger_3"|text="You awaken the moment the sun goes down, and find yourself lying in a pile of garbage."|{tk.set_hunger(3)}
+
+"Holy shit, you're alive! Thought for sure you was dead."
+
+The return to consciousness is jarring, almost painful. Not at all like waking up from natural sleep, like you used to do. The man kneeling at your side reeks of cheap booze and body odor, but the concern on his face seems genuine.
+
+"You alright?," he slurs, swaying a bit. "You wasn't movin' at all. Like a dead body or something."
+At that, you instinctively practice your breathing. In and out. In... and out...
+
+How you ended up in this dirty back alley is a question for later. For now, there's the matter of this man who saw you (and apparently spent some time around you) while you were compromised.
+
+You're not bound by the Tower or its rules, but like every other tick in this city you have a [i]visceral[/i] understanding of what happens when enough idiots violate what the Tower calls the First Tradition. The Masquerade.
+
+The mortal masses have to be kept in the dark. The more they see, the more they learn, the more they talk, the more likely they are to draw the SI's attention.
+
+And that can't happen here. Not again.
+
+>|choice_start="man_fate1"|So how much did this guy see? And what are you going to do about it?
+
+    He has to go, and I'm hungry. Let's get this over with - quick and painless.|goto="t08a-drain"
+    Let him go. He only saw me "passed out" on the street. And who would believe a homeless drunk anyway?|goto="t08b-spare"
+    I'm not going to kill this man just for being here. I don't even know how [i]I[/i] got here. But I could sure use a snack.|goto="t08c-sipdip"
+
+>|choice_end
+
+>|label="t08a-drain"|goto="t08a-drain-roll"|The man sees the expression on your face and takes a step back.
+"H-hey hold on, now-"
+
+>|roll="t08a-drain-roll"|{dexterity+athletics+2#pool3}|win="man_drained1"|fail="man_escapes_A"
+
+>|label="man_drained1"|He doesn't have a chance, or even time to scream. Once your fangs are in he goes limp like all the rest. A few minutes later and you've taken everything.
+
+>|statechange|text="Everything he is, was, or could have been pours down your throat and floods into your veins. The rush is incredible, and for once you feel... whole."|{tk.set_hunger(0, killed=True, innocent=True)}|goto="man_drained2"
+
+>|label="man_drained2"|But you know it won't last, and you have business to attend to.|goto="test-intro-end"
+
+>|label="man_escapes_A"|Maybe you're still sluggish from daysleep, or maybe the man is quicker than he looked. Either way, something in your eyes spooked him, tipped him off.
+He staggers back and spins on his heels in an impressively smooth motion, and runs away. You could chase him, but that might make things worse.
+
+>|statechange|Well that could have gone better. No breakfast for you, it seems.|goto="test-intro-end"|{print('semen')}
+
+>|label="t08b-spare"|Marshalling your will to hold the Beast in check, you force your face into what you hope looks like a sheepish grin.
+"Nah, I'm fine. Just... partied a bit too hard."
+
+He guffaws. "I was young too, once 'pon a time. But it's rough out here, so you might wanna ease up a bit."
+You raise an eyebrow at that, and make a show of looking him up and down.
+Another laugh, softer and more bitter this time. "I ain't got nothin' left to lose, youngin'. You look like you might."
+
+You give him a sad smile, shake his hand, and set on your way.|goto="test-intro-end"
+
+>|label="t08c-sipdip"|You flash him a sheepish grin.
+"Last night was pretty crazy. You got the time?"
+He actually does have a watch, surprisingly. When he glances down, you strike.
+"Someone musta took your phone, huh? It's abou-"
+
+>|roll|{manipulation+intrigue+nosbane#diff2}|win="man_sipped"|fail="man_escapes_B"
+
+>|statechange="man_sipped"|text="He goes limp the moment your fangs pierce his neck, moaning softly. You take a few good mouthfuls - just enough to take the edge off. Then you gently lower him to the ground, lick the puncture wounds on his neck away, and set off into the night."|{tk.set_hunger("-=1")}|goto="test-intro-end"
+
+>|label="man_escapes_B"|He's quicker than he looks.
+"The fuck you on about?"
+He doesn't wait for your response. Instead, he turns on his heels and runs. It'd probably be a bad idea to chase him, and you don't think he saw your fangs.|goto="test-intro-end"
+
+>|label="test-intro-end"|Later that night... (end of text file test)
+
+>|event_end

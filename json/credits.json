@@ -1,0 +1,58 @@
+[
+  {
+    "name":"",
+    "type":"",
+    "works":[
+      {"name":"", "licenseUrl":""}
+    ],
+    "website":"",
+    "socials":[
+      {"site":"", "handle":"", "url":""}
+    ]
+  },
+  {
+    "name":"Timbre",
+    "type":"sound_engineer",
+    "works":[
+      {"name":"Jobro's Heartbeat (Timbre's variant)", "licenseUrl":"https://creativecommons.org/licenses/by-nc/3.0/"}
+    ],
+    "website":"",
+    "socials":[
+      {"site":"freesound.org", "handle":"Timbre", "url":"https://freesound.org/people/Timbre/"}
+    ]
+  },
+  {
+    "name":"Pexels",
+    "type":"photographer",
+    "works":[
+      {"name":"iphone laptop", "licenseUrl":"https://pixabay.com/service/license/"}
+    ],
+    "website":"https://pixabay.com/users/pexels-2286921/",
+    "socials":[
+      {"site":"Pexels.com", "handle":"Pexels User 2286921", "url":"https://pixabay.com/users/pexels-2286921/"}
+    ]
+  },
+  {
+    "name":"Darkstar83",
+    "type":"musician",
+    "works":[
+      {"name":"Shadow Walker", "licenseUrl":"https://creativecommons.org/licenses/by-nc-nd/4.0/"},
+      {"name":"The Witch's Dream", "licenseUrl":"https://creativecommons.org/licenses/by-nc-nd/4.0/"}
+    ],
+    "website":"https://darkstar83.net/",
+    "socials":[
+      {"site":"Soundcloud", "handle":"Darkstar83", "url":"https://soundcloud.com/darkstar83"},
+      {"site":"Youtube", "handle":"Darkstar83", "url":"https://www.youtube.com/user/DARKSTARS83TV"}
+    ]
+  },
+  {
+    "name":"Ilmari Karonen",
+    "type":"artist",
+    "works":[
+      {"name":"1x1.png (Wikimedia Commons)", "licenseUrl":"https://commons.wikimedia.org/wiki/File:1x1.png"}
+    ],
+    "website":"https://commons.wikimedia.org/wiki/User:Ilmari_Karonen",
+    "socials":[]
+  }
+
+]

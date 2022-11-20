@@ -1,0 +1,22 @@
+{
+  "backgrounds": {
+    "test_bg_1": {
+
+    }
+  },
+  "hunger_quotes": [
+    ["[i]Goddamn[/i] that feels good.", "I feel... whole.", "The emptiness is gone, just for a bit.", "Oh God, what have I done?"],
+    ["Eh... I could eat.", "I'm fine...", "I'm good.", "I'm good."],
+    ["Time to hunt...", "Time to hunt...", "Eh, I could eat.", "Eh, I could eat."],
+    ["Ayyy where my juicebags at?", "Should feed soon...", "Getting pretty hungry...", "It can wait, if need be."],
+    ["FEED. NOW.", "'Bout to grab me a fuckin' drink!", "Come on. Mind over matter.", "The Beast doesn't rule me. [i]I[/i] rule me."],
+    ["Can't think. Blood...", "FUCKFUCKFUCKFUCKFUCK", "I need to feed before I lose control...", "I need to feed before I lose control..."]
+  ],
+  "humanity_scores": [
+    "Callously disdainful",
+    "Jaded and cynical",
+    "Concerned and contrite",
+    "Doggedly principled",
+    "Serenely absolved"
+  ]
+}

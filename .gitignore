@@ -1,0 +1,10 @@
+# Ignore content files, saves, cache, etc. Only want to track script files.
+
+__pycache__/
+.idea/
+audio/
+images/
+venv/
+
+notes.txt
+TODO.txt

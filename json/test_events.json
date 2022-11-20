@@ -1,0 +1,34 @@
+[
+  {
+    "eid": "test_intro",
+    "type": "event",
+    "moments": [
+      {"mid": "t01", "type": "blurb", "text": "You awaken the moment the sun goes down, and find yourself lying in a pile of garbage.\n\n\"Holy shit, you're alive! Thought for sure you were dead.\""},
+      {"mid": "t02", "type": "blurb", "text": "The return to consciousness is jarring, almost painful. Not at all like waking up from true sleep, like you used to do.\n\nThe man kneeling at your side reeks of cheap whiskey and body odor, but the concern on his face seems genuine."},
+      {"mid": "t03", "type": "b", "text": "\"You alright? You wasn't movin' at all. Like a dead fuckin' body.\"\n\n...At that, you instinctively practice breathing. In and out. In... and out."},
+      {"mid": "t04", "type": "blurb", "text": "How you ended up in this dirty back alley is a question for later. For now, there's the matter of this man who saw you (and apparently spent some time around you) while you were compromised."},
+      {"mid": "t05", "type": "blurb", "text": "You're not bound by the Tower or its rules, but like every other tick in this city you have a [i]visceral[/i] understanding of what happens when enough idiots violate what the Tower calls the First Tradition. The Masquerade."},
+      {"mid": "t06", "type": "b", "text": "The mortal masses have to be kept in the dark. The more they see, the more they learn, the more they talk, the more likely they are to draw the SI's attention."},
+      {"mid": "t07", "type": "b", "text": "And that can't happen here. Not again."},
+      {
+        "mid": "c01",
+        "type": "choice",
+        "text": "So what did this guy see? And what are you going to do about it?",
+        "choices": [
+          {"label": "He has to go, and I'm hungry. Let's get this over with - quick and painless.", "goto": "t08a-drain"},
+          {"label": "Let him go. He only saw me \"passed out\" on the street. And who would believe a homeless drunk anyway?", "goto": "t08b-spare"},
+          {"label": "I'm not going to kill this man, but I could use a snack.", "goto": "t08c-sipdip"}
+        ]
+      },
+      {"mid": "t08a-drain", "type": "b", "text": "The man sees the expression on your face and takes a step back.\n\n\"'Ey hold on, now-\"\n\nHe doesn't have a chance, or even time to scream. Once your fangs are in he goes limp like all the rest. A few minutes later and you've taken everything.", "goto": "test-intro-end"},
+      {"mid": "t08b-spare", "type": "b", "text": "Marshalling your will to hold the Beast in check, you force your face into what you hope looks like a sheepish grin.\n\n\"Nah, I'm fine. Just... partied a bit too hard.\"", "goto": "test-intro-end"},
+      {"mid": "t08c-sipdip", "type": "b", "text": "You flash him a sheepish grin.\n\n\"Last night was pretty crazy. You got the time?\"\n\nHe actually does have a watch, surprisingly. When he glances down, you strike.\n\n\"Someone musta took your phone, huh? It's abou-\""},
+      {"mid": "t09c", "type": "blurb", "text": "He goes limp the moment your fangs pierce his neck, moaning softly. You take a few good mouthfuls - just enough to take the edge off. You gently lower him to the ground, lick the puncture wounds away, and set off.", "goto": "test-intro-end"},
+      {"mid": "", "type": "", "text": ""},
+      {"mid": "", "type": "", "text": ""},
+      {"mid": "", "type": "", "text": ""},
+      {"mid": "", "type": "", "text": ""},
+      {"mid": "test-intro-end", "type": "b", "text": "Later that night... (end of test)"}
+    ]
+  }
+]

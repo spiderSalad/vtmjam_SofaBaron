@@ -1,0 +1,128 @@
+class Deprecated:
+    @staticmethod
+    def build_from_json(filename, eid):  # TODO: check back here whenever event or moment structures are changed
+        event_json = Utils.get_json_from_file(Config.PATH_JSON_EVENTS + filename, mode='r')
+        try:
+            itin = filter(lambda event: event[Config.REF_EID] == eid, event_json)
+            itin = list(itin)[0]
+        except Exception as e:
+            Utils.log("{} occurred while attempting to load game events from JSON.".format(e.__class__), e)
+            return None
+        gevent, ngit = GameEvent(etype=itin[Config.REF_TYPE], eid=itin[Config.REF_EID]), []
+        for json_moment in itin[Config.REF_MOMENTS]:
+            mtype, mid = Moment.validate_mtype(str(json_moment[Config.REF_TYPE]).lower()), json_moment[Config.REF_MID]
+            if mtype == Moment.M_TEXT_BLURB:
+                txt, goto = json_moment[Config.REF_TEXT], json_moment[Config.REF_GOTO_MOMENT] if Config.REF_GOTO_MOMENT in json_moment else None
+                if txt:
+                    moment = TextBlurb(mid=mid, text=txt, goto=goto)
+                else:
+                    moment = None
+            elif mtype == Moment.M_USER_CHOICE:
+                choice_prompt = json_moment[Config.REF_CHOICE_PROMPT]
+                moment = UserChoice(mid=mid, text=choice_prompt, choices=json_moment[Config.REF_CHOICES])
+            elif mtype == Moment.M_STATE_CHANGE:
+                txt = json_moment[Config.REF_TEXT] if Config.REF_TEXT in json_moment else None
+                goto = json_moment[Config.REF_GOTO_MOMENT] if Config.REF_GOTO_MOMENT in json_moment else None
+                # NOTE: Game doesn't currently support building functions from local JSON files.
+                moment = StateChange(mid=mid, expr=json_moment[Config.REF_STATE_CHANGE_EXPR], goto=goto, text=txt)
+            elif mtype == Moment.M_DICE_ROLL:
+                moment = DiceRoll(mid=mid)
+            elif mtype == Moment.M_JUMP_2_EVENT:
+                destination_eid, text = json_moment[Config.REF_EID], json_moment[Config.REF_TEXT] if Config.REF_TEXT in json_moment else None
+                moment = EventJump(mid=mid, destination_eid=destination_eid, text=text)
+                # raise NotImplemented("jump jump jump")
+            else:
+                raise ValueError("Invalid Moment type \"\" encountered while compiling event \"{}\"".format(mtype, eid))
+            if moment:
+                ngit.append(moment)
+            else:
+                Utils.log("[Warning]: Moment skipped? Check if a Moment has empty id or text fields.")
+        gevent.itinerary = ngit
+        return gevent
+
+    @staticmethod
+    def build_from_txt(filename, eid):
+        event_txt_lines = Utils.read_text_from_file(Config.PATH_TEXT_EVENTS + filename, mode='r')
+        evt = GameEvent(etype="event_from_text", eid=eid)
+        current_moment, i = None, 0
+        while i < len(event_txt_lines):
+            line = event_txt_lines[i]
+            tag, goto = Utils.get_excerpt(line, ">|", "|"), Utils.get_excerpt(line, "goto=\"", "\"")
+            print("tag found in {}: {}".format(line, tag))
+            if i == 0 and (not tag or "event" not in tag):
+                raise ValueError("There should be an event tag in the first line.")
+            if current_moment is None and (not tag or "label" in tag):  # TextBlurb
+                tb_mid = Utils.get_excerpt(tag, "label=\"", "\"") if tag else None
+                b_text, i_jump = GameEvent.compile_single_blurb(event_txt_lines, i)
+                if b_text:
+                    evt.itinerary.append(TextBlurb(mid=tb_mid, text=b_text, goto=goto))
+                i = i_jump
+            elif Utils.is_iterable(tag) and "choice_start" in tag:  # start of UserChoice
+                current_moment = UserChoice(mid=Utils.get_excerpt(tag, "choice=\"", "\""), text=line[line.find("\"|"):])
+            elif Utils.is_iterable(tag) and "choice_end" in tag and isinstance(current_moment,
+                                                                               UserChoice):  # end of UserChoice
+                evt.itinerary.append(current_moment)
+                print("CURRENT MOMENT:", current_moment)
+                current_moment = None
+            elif isinstance(current_moment, UserChoice):  # UserChoice options
+                if not line.strip("\n"):
+                    i += 1
+                    continue
+                goto_tag = "goto=\""
+                goto_index, goto = line.find(goto_tag), None
+                print("SHOULD BE A \"{}\" on this line:{}".format(goto_tag, line))
+                print("^goto_index = {}".format(goto_index))
+                if goto_index > -1:
+                    goto_index += len(goto_tag)
+                    # goto = line[goto_index:line.find("\"")]
+                    goto = Utils.get_excerpt(line, goto_tag, "\"")
+                    cl_text = line[:goto_index].strip("\n")
+                    print("\nGOTO (i = {}):{}".format(i, goto))
+                else:
+                    raise ValueError(
+                        "Attempted to build a UserChoice object from \"{}\", but we're missing a goto tag at i = {}".format(
+                            filename, i))
+                if cl_text and cl_text != "\n":
+                    current_moment.choices.append({Config.REF_CHOICE_LABEL: cl_text, Config.REF_GOTO_MOMENT: goto})
+            elif Utils.is_iterable(tag) and "statechange" in tag:  # StateChange should always be able to fit on one line.
+                sc_expr = Utils.get_excerpt(line, "|x{", "}x|")
+                sc = StateChange(mid=Utils.get_excerpt(tag, "statechange=\"", "\""), goto=goto, expr=sc_expr)
+                sc.text = Utils.get_excerpt(line, "\"|", "|x")
+                evt.itinerary.append(sc)
+            elif "event_end" in tag:
+                break
+            elif i > 0:
+                raise NotImplemented("We haven't implemented anything past this!")
+            i += 1
+        print("TEXT_BUILT_EVENT:\n", evt)
+        return evt
+
+    @staticmethod
+    def get_excerpt(exstr: str, start_token, end_token, multiline=False):
+        st_index = exstr.find(start_token)
+        if st_index < 0:
+            return None
+        st_index += len(start_token)
+        et_index = exstr[st_index:].find(end_token)
+        if et_index < 0 and not multiline:
+            endline = exstr.find('\n')
+            dekok = exstr[st_index:endline if endline > -1 else len(exstr)]
+            print(dekok)
+            return dekok
+        if et_index < 0:
+            return exstr[st_index:]
+        # et_index += len(end_token)
+        retval = exstr[st_index:st_index + et_index]
+        return retval
+
+
+    def print_widget_tree(self, root=None, level=0):
+        def print_widget(widget, lvl):
+            print("{}{} | position = {}, size = {})".format(' ' * 4 * lvl, widget, widget.pos, widget.size))
+
+        if root is None:
+            root, level = self, 0
+            print_widget(root, level)
+        for child in root.children:
+            print_widget(child, level + 1)
+            self.print_widget_tree(child, level + 1)

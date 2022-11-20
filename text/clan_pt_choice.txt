@@ -1,0 +1,41 @@
+>|event_start
+
+>|choice_start="clan_choice"|As a member of...
+
+    The Clan of the Hidden, Clan Nosferatu|goto="clan_nosferatu"
+    The Clan of Doomed Wanderers, Clan Ravnos|goto="clan_ravnos"
+    The Clan of Kings, Clan Ventrue|goto="clan_ventrue"
+
+>|choice_end
+
+>|statechange="clan_nosferatu"|text="You ugly."|goto="post_clan_choice"|{tk.choose_clan("Nosferatu")}
+
+>|statechange="clan_ravnos"|text="You homeless."|goto="post_clan_choice"|{tk.choose_clan("Ravnos")}
+
+>|statechange="clan_ventrue"|text="You picky."|goto="post_clan_choice"|{tk.choose_clan("Ventrue")}
+
+>|label="post_clan_choice"|So in light of such difficulties, you've developed a set of useful strategies and techniques for getting what you need.
+Although some would say they're just a set of bad habits that'll get you into trouble sooner or later.
+
+>|choice_start="pt_choice"|You hunt by...
+
+    I skip all the pretense and bullshit and just [i]take[/i] what I need. It ain't pretty, but it's usually quick and simple.|goto="pt_alley_cat"
+    I didn't hunt my own food when I was alive. Why start now? I just drink the bagged stuff. Less dangerous.|goto="pt_bagger"|enabled={tk.pc_can_drink_swill()}
+    I feed on animals, usually. Not exactly living the Kindred high life, but it's easier on the conscience.|goto="pt_farmer"|enabled={tk.pc_can_drink_swill()}
+    My favorite way to feed is during sex. One pleasure heightens the other, for everyone involved.|goto="pt_siren"
+
+>|choice_end
+
+>|statechange="pt_alley_cat"|text="Your hunting blends in nicely with the city's mundane mortal crime. As long as you're careful and don't leave any obviously exsanguinated corpses lying around, things tend to work out okay."|goto="post_pt_choice"|{tk.choose_pt("Alley Cat")}
+
+>|statechange="pt_bagger"|text="Realistically it's just a different kind of danger. But it's a less direct kind, the kind you're much better at managing."|goto="post_pt_choice"|{tk.choose_pt("Bagger")}
+
+>|statechange="pt_farmer"|text="Slightly easier, anyway. And a lot safer - nobody notices or cares if vermin or strays go missing. They can say what they like. More rat for you."|goto="post_pt_choice"|{tk.choose_pt("Farmer")}
+
+>|statechange="pt_siren"|text="Fucking your food is.... a choice. A choice you'd make [i]every[/i] time, if you could."|goto="post_pt_choice"|{tk.choose_pt("Siren")}
+
+>|label="post_pt_choice"|So anyway...
+
+>|statechange=""|text="(Also, you're a med student, because I said so.)"|{tk.add_background("test_bg_med_student")}
+
+>|event_end

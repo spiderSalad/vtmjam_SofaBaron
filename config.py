@@ -1,16 +1,23 @@
-import string
+import sys
+from string import ascii_letters, digits
+from os import path
 
 
 class Config:
     DEV_MODE = True
     KEY_INPUT_ENABLED = False
-    KEY_INPUT_WATCH = string.ascii_letters + string.digits
+    KEY_INPUT_WATCH = ascii_letters + digits
     SAVE_FILE_PREFIX = "Sofa_Baron_Save#"
 
-    PATH_JSON = "json/"
-    PATH_JSON_EVENTS = "json/"
-    PATH_TEXT_EVENTS = "text/"
-    PATH_GUI_IMAGES = "images/gui/"
+    if hasattr(sys, "_MEIPASS"):
+        WORKING_PATH = sys._MEIPASS
+    else:
+        WORKING_PATH = path.realpath(path.dirname("__file__"))
+    PATH_JSON = path.normpath(WORKING_PATH + "/json/")
+    PATH_JSON_EVENTS = path.normpath(WORKING_PATH + "/json/")
+    PATH_TEXT_EVENTS = path.normpath(WORKING_PATH + "/text/")
+    PATH_IMAGES = path.normpath(WORKING_PATH + "/images/")
+    PATH_GUI_IMAGES = path.normpath(WORKING_PATH + "/images/gui/")
 
     DOT_NUMBERS = ("zero", "one", "two", "three", "four", "five")
 

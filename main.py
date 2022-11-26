@@ -1,12 +1,19 @@
+from os import environ
+from utils import Utils
+
+if Utils.get_platform() == 'win':
+    environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
+    environ['GST_REGISTRY'] = '%USERPROFILE%\\gst_registry.bin'
+
 from kivy.config import Config as KivyConfig
 
 GAME_WINDOW_WIDTH, GAME_WINDOW_HEIGHT = 1440, 810
 KivyConfig.set('graphics', 'width', str(GAME_WINDOW_WIDTH))
 KivyConfig.set('graphics', 'height', str(GAME_WINDOW_HEIGHT))
 
-from kivy import platform
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.resources import resource_add_path  # , resource_find
 from kivy.uix.floatlayout import FloatLayout
 
 from gui_widgets import MainGuiFrame, MainConsole, DevConsole, ScreenJuggler, MainTextFeed, DarkPackDisclaimer, \
@@ -26,7 +33,7 @@ class MainWidget(FloatLayout):
             self.pc_ref = None
         self.dice_box = None
         self.temp_summary, self.temp_roll = None, None
-        if self.is_desktop():
+        if Utils.is_desktop():
             self.keyboard = Window.request_keyboard(self.keyboard_closed, self)
             self.keyboard.bind(on_key_down=self.on_keyboard_down)
             self.keyboard.bind(on_key_up=self.on_keyboard_up)
@@ -40,7 +47,6 @@ class MainWidget(FloatLayout):
         return self.game.game_running()
 
     def refresh_screen(self, screen_name):
-        # if screen_name == "tab_charsheet"
         self.sm.get_screen(screen_name).update(self.pc_ref)
 
     def set_gui_state(self, gui_state: str):
@@ -143,12 +149,6 @@ class MainWidget(FloatLayout):
             self.main_text.main_text_pick_choice(goto=self.main_text.choice_list[int(keycode) - 1])
 
     @staticmethod
-    def is_desktop():
-        if platform in ('win', 'linux', 'macosx'):
-            return True
-        return False
-
-    @staticmethod
     def on_press_quit():
         App.get_running_app().stop()
         quit()
@@ -194,4 +194,5 @@ class VtmJamSofaBaronApp(App):
 
 
 if __name__ == '__main__':
+    resource_add_path(Utils.get_resource_path(""))
     VtmJamSofaBaronApp().run()

@@ -1,7 +1,9 @@
 import string
-
 import json
+from os import path
 from random import randint, choices as random_choices
+from kivy import platform
+from config import Config
 
 
 class ObjectWrapper:
@@ -76,16 +78,45 @@ class Utils:
         return [randint(1, max_val) for _ in range(num_dice)]
 
     @staticmethod
-    def get_json_from_file(path, mode='r'):
-        with open(path, mode) as read_file:
+    def get_json_from_file(file_name, mode='r'):
+        file_path = path.normpath(Config.PATH_JSON + '/' + file_name)
+        with open(file_path, mode) as read_file:
             data = json.load(read_file)
             return data
 
     @staticmethod
-    def read_text_from_file(path, mode='r'):
-        with open(path, mode) as read_file:
+    def read_text_from_file(file_name, mode='r'):
+        file_path = path.normpath(Config.PATH_TEXT_EVENTS + '/' + file_name)
+        with open(file_path, mode) as read_file:
             data = read_file.readlines()
             return data
+
+    @staticmethod
+    def get_image_file_path(file_name, image_type="gui"):
+        if image_type == "gui":
+            return path.normpath(Config.PATH_GUI_IMAGES + '/' + file_name)
+        return path.normpath(Config.PATH_IMAGES + '/' + file_name)
+
+    @staticmethod
+    def get_resource_path(relative_path):
+        # if hasattr(sys, "_MEIPASS"):
+        #     resource_path = path.join(sys._MEIPASS, relative_path)
+        # else:
+        #     resource_path = path.join(path.abspath("."), relative_path)
+        resource_path = path.normpath(path.join(Config.WORKING_PATH, relative_path))
+        print("get resource path ==> {}".format(resource_path))
+        return resource_path
+
+    @staticmethod
+    def get_platform():
+        return platform
+
+    @staticmethod
+    def is_desktop():
+        plat = Utils.get_platform()
+        if plat in ('win', 'linux', 'macosx'):
+            return True
+        return False
 
     @staticmethod
     def get_excerpt(exstr: str, start_token, end_token):

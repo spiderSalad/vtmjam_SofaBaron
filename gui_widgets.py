@@ -187,13 +187,13 @@ class CreditsScreen(Screenlike):
         # self.credits_text.halign, self.credits_text.valign = 'left', 'top'
         self.credits_text.bind(on_ref_press=CreditsScreen.hyperlink)
         self.add_widget(self.credits_container)
-        self.path = Config.PATH_JSON + "credits.json"
+        self.credits_file_path = "credits.json"
         try:
-            self.credits_json = Utils.get_json_from_file(self.path)
+            self.credits_json = Utils.get_json_from_file(self.credits_file_path)
             # print(json.dumps(self.credits_json, sort_keys=True, indent=2))
             self.display_credits()
         except FileNotFoundError as fnfe:
-            Utils.log("{}: Couldn't find file \"{}\".".format(fnfe.__class__, self.path), fnfe)
+            Utils.log("{}: Couldn't find file \"{}\".".format(fnfe.__class__, self.credits_file_path), fnfe)
         except Exception as e:
             Utils.log("Unexplained {} loading JSON credits file.".format(e.__class__), e)
 
@@ -491,7 +491,7 @@ class DotScore(BoxLayout):
         self.label.halign, self.label.valign = "right", "middle"
         self.label.font_size = "16sp"
         number_word = Config.DOT_NUMBERS[self.score]
-        self.dots = Image(source="{}dots_{}_{}.png".format(Config.PATH_GUI_IMAGES, self.dot_color, number_word))
+        self.dots = Image(source=Utils.get_image_file_path("dots_{}_{}.png".format(self.dot_color, number_word)))
         self.dots.size_hint = (0.45, 1)
         self.add_widget(self.label)
         self.add_widget(self.dots)
@@ -514,7 +514,7 @@ class DotScore(BoxLayout):
 
     def update(self):
         number_word = Config.DOT_NUMBERS[self.score]
-        self.dots.source = "{}dots_{}_{}.png".format(Config.PATH_GUI_IMAGES, self.dot_color, number_word)
+        self.dots.source = Utils.get_image_file_path("dots_{}_{}.png".format(self.dot_color, number_word))
 
 
 class CSDossier(GridLayout):
@@ -531,7 +531,7 @@ class CSDossier(GridLayout):
         self.pc_humanity = self.pc_humanity_box = self.pc_hunger = self.pc_hunger_box = None
         self.pc_humanity_tagline = self.pc_hunger_tagline = None
         self.hp_track = self.will_track = None
-        char_info = Utils.get_json_from_file(Config.PATH_JSON + "char_info.json")
+        char_info = Utils.get_json_from_file("char_info.json")
         self.humanity_scores, self.hunger_quotes = char_info["humanity_scores"], char_info["hunger_quotes"]
         self.init_name_clan()
         self.init_undeath_params()
@@ -661,10 +661,11 @@ class TrackerBox(Image):
             self.set_image()
 
     def set_image(self):
-        self.source = "{}{}{}_{}.png".format(
-            Config.PATH_GUI_IMAGES, TrackerBox.PREFIXES[self.trackertype],
-            TrackerBox[Config.DISC_FORTITUDE] if self.fort else "", TrackerBox.PREFIXES[self.dtype]
-        )
+        self.source = Utils.get_image_file_path("{}{}_{}.png".format(
+            TrackerBox.PREFIXES[self.trackertype],
+            TrackerBox[Config.DISC_FORTITUDE] if self.fort else "",
+            TrackerBox.PREFIXES[self.dtype]
+        ))
 
 
 class TrackerLine(BoxLayout):

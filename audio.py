@@ -5,16 +5,22 @@ from utils import Utils
 
 class AudioWrapper:
     def __init__(self, audio_path, audio_id="audio-wrapper-object", ffpyplayer_bug=True, internal_volume=1):
-        self.audio = SoundLoader.load(audio_path)
-        self.id = audio_id
-        self.FFPYPLAYER_BUG = ffpyplayer_bug
-        self.internal_volume = internal_volume
+        self.audio_setup = False
+        try:
+            self.audio = SoundLoader.load(audio_path)
+            self.id = audio_id
+            self.FFPYPLAYER_BUG = ffpyplayer_bug
+            self.internal_volume = internal_volume
+            self.audio_setup = True
+        except Exception as e:
+            Utils.log('Audio object failure ({}), exception type {}: '.format(audio_path, e.__class__), e)
 
     def play(self, loop=False):
-        self.audio.loop = loop
-        if self.FFPYPLAYER_BUG:
-            self.audio.seek(0)
-        self.audio.play()
+        if self.audio_setup:
+            self.audio.loop = loop
+            if self.FFPYPLAYER_BUG:
+                self.audio.seek(0)
+            self.audio.play()
 
     def loop(self):
         self.play(True)
@@ -26,7 +32,8 @@ class AudioWrapper:
         self.audio.seek(position)
 
     def set_volume(self, volume):
-        self.audio.volume = self.internal_volume * volume
+        if self.audio_setup:
+            self.audio.volume = self.internal_volume * volume
 
     def get_state(self):
         return self.audio.state
@@ -96,4 +103,3 @@ def init_audio(ah: AudioHandler):
     # music
     ah.default_test_track = ah.register_track("default_test_track", "audio/music/Darkstar83 - Shadow Walker.mp3")
     Utils.log("Audio initialized.")
-

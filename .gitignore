@@ -4,6 +4,7 @@ __pycache__/
 .idea/
 audio/
 images/
+junk/
 venv/
 
 notes.txt

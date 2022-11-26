@@ -150,7 +150,7 @@ class GameEvent:  # A packaged bundle of moments that constitute a scene. Buildi
 
     @staticmethod
     def build_from_txt(filename, eid):
-        event_txt_lines = Utils.read_text_from_file(Config.PATH_TEXT_EVENTS + filename, mode='r')
+        event_txt_lines = Utils.read_text_from_file(filename, mode='r')
         evt = GameEvent(etype="event_from_text", eid=eid)
         current_moment, i, goto_tag = None, 0, "goto=\""
         c_enabled_tag, c_shown_tag = "enabled={", "shown={"
